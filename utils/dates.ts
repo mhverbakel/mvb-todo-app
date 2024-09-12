@@ -1,0 +1,1 @@
+export function toRelativeString(date: DateTime)
