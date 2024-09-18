@@ -1,16 +1,11 @@
 import { DateTime } from "luxon";
+import { CalendarDate } from "./calendar-date";
+import { ISchedule } from "./schedules";
 
 export interface ITask {
   title: string;
-  lastExecuted: DateTime;
-  status: TaskStatus;
-}
-
-export enum TaskStatus {
-  Future,
-  Due,
-  Overdue,
-  Executed,
-  Skipped,
-  Snoozed,
+  lastExecuted?: CalendarDate;
+  snoozedUntil?: DateTime;
+  dueDate?: CalendarDate;
+  schedule: ISchedule;
 }

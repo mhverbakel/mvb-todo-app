@@ -1,25 +1,14 @@
-import { DateTime, DurationLikeObject } from "luxon";
+import { CalendarDate } from "@/data/calendar-date";
 
-const skew: DurationLikeObject = { hours: 5 };
-
-function toDate(dateTime: DateTime) {
-  return dateTime
-    .setLocale("nl-nl")
-    .setZone("local", { keepLocalTime: true })
-    .minus(skew)
-    .startOf("day");
-}
-
-export const today = toDate(DateTime.now());
-
-export function toRelative(dateTime: DateTime) {
-  const date = toDate(dateTime);
-  const days = date.diff(today, "days").days;
-  if (Math.ceil(days) !== days) {
-    throw new Error(
-      `Rounding error: ${days} days between ${date.toISO()} and ${today.toISO()}`
-    );
+export function toRelative(
+  date: CalendarDate | undefined,
+  today: CalendarDate
+) {
+  if (!date) {
+    return "nooit";
   }
+
+  const days = date.diff(today);
 
   // Custom values for close dates.
   switch (days) {
@@ -38,9 +27,8 @@ export function toRelative(dateTime: DateTime) {
   const future = days > 0;
 
   if (Math.abs(days) < 7) {
-    return `${future ? "komende" : "afgelopen"} ${date.toFormat("cccc")}`;
+    return `${future ? "komende" : "afgelopen"} ${date.dayOfWeek}`;
   }
 
-  const weeks = Math.round(days / 7);
-  return future ? `over ${weeks} weken` : `${-weeks} weken geleden`;
+  return future ? `over ${days} ` : `${-days} dagen geleden`;
 }

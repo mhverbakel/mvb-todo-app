@@ -1,30 +1,31 @@
 import { DateTime } from "luxon";
-import { ITask, TaskStatus } from "./task";
+import { ITask } from "./task";
+import { IntervalSchedule } from "./schedules";
+import { CalendarDate } from "./calendar-date";
 
 function d(days: number, hour?: number) {
-  return DateTime.local()
-    .plus({ days })
-    .startOf("day")
-    .plus({ hours: hour ?? Math.random() * 16 + 8 });
+  return new CalendarDate(
+    DateTime.local({ zone: "Europe/Amsterdam" })
+      .plus({ days })
+      .startOf("day")
+      .plus({ hours: hour ?? Math.random() * 16 + 8 })
+  );
 }
 
-function t(
-  days: number,
-  title: string,
-  status: TaskStatus = TaskStatus.Due
-): ITask {
-  const date = d(-days);
+function interval(title: string, days = 1): ITask {
   return {
     title,
-    lastExecuted: date,
-    status,
+    dueDate: d(0),
+    schedule: new IntervalSchedule(days),
   };
 }
 
 export const tasks: ITask[] = [
-  t(1, "❄ eten uithalen"),
-  t(5, "📮 brievenbus", TaskStatus.Overdue),
-  t(1, "🔑 garagedeur"),
-  t(4, "🌟 een naam van een taak die veel langer is dan dat je scherm lang is"),
-  t(-20, "📦 oud papier", TaskStatus.Future),
+  interval("❄ eten uithalen"),
+  interval("📮 brievenbus", 3),
+  interval("🔑 garagedeur"),
+  interval(
+    "🌟 een naam van een taak die veel langer is dan dat je scherm lang is"
+  ),
+  interval("📦 oud papier", 30),
 ];
