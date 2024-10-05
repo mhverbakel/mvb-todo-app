@@ -11,9 +11,10 @@ export default function Page() {
     <main>
       <div
         onClick={() => setFakeDay((x) => x.next())}
-        className="bg-slate-200 h-24 w-full flex content-center items-center"
+        className="bg-slate-200 h-16 px-4 w-full flex flex-col content-center items-start justify-center"
       >
-        Het is vandaag {fakeDay.dayOfWeek}.
+        <p>Het is vandaag {fakeDay.dayOfWeek}.</p>
+        <small>Klik om te verversen...</small>
       </div>
       {tasks.map((t, i) => (
         <Task task={t} key={i} today={fakeDay} />
